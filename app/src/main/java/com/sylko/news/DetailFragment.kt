@@ -37,6 +37,5 @@ class DetailFragment : Fragment(R.layout.detail_news) {
             )
             NavHostFragment.findNavController(this).navigate(R.id.action_detailFragment_to_webFragment, bundle)
         }
-
     }
 }
