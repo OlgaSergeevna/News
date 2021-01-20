@@ -3,10 +3,13 @@ package com.sylko.news
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import com.sylko.news.api.ApiFactory
 import com.sylko.news.database.AppDatabase
+import com.sylko.news.pojo.News
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -15,10 +18,19 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     val allNews = db.newsDao().getAllNews()
 
-    fun loadData() {
+    init {
+        loadData()
+    }
+
+    fun getDetailNews(url: String): LiveData<News>{
+        return db.newsDao().getSelectedNews(url)
+    }
+
+    private fun loadData() {
         val disposable = ApiFactory.apiService.getArticles("b6869a57147642bf8ef94a7c6e3ed9b9")
-            //.map { it.articles?.map { it.title }?.joinToString(",") }//так можно было получить только
-            //заголовки через запятую
+            .delaySubscription(10,TimeUnit.SECONDS)//десятисекундный интервал загрузки
+            .repeat()//-автозагрузка/автообновление, работает до тех пор, пока все загружается успешно.
+            .retry()//-здесь загружка продолжается даже после ошибки
             .subscribeOn(Schedulers.io())
             .subscribe({
                 db.newsDao().insertNews(it.articles)
