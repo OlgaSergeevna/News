@@ -32,9 +32,9 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun loadData() {
         val disposable = ApiFactory.apiService.getArticles("b6869a57147642bf8ef94a7c6e3ed9b9")
-            .delaySubscription(10,TimeUnit.MINUTES)//десятиминутный интервал загрузки
-            .repeat()//-автозагрузка/автообновление, работает до тех пор, пока все загружается успешно.
-            .retry()//-здесь загружка продолжается даже после ошибки
+//            .delaySubscription(10,TimeUnit.SECONDS)//десятиминутный интервал загрузки
+//            .repeat()//-автозагрузка/автообновление, работает до тех пор, пока все загружается успешно.
+//            .retry()//-здесь загрузка продолжается даже после ошибки
             .subscribeOn(Schedulers.io())
             .subscribe({
                 db.newsDao().insertNews(it.articles)
