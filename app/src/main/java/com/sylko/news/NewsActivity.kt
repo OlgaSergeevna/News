@@ -21,7 +21,5 @@ class NewsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_news)
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-
     }
-
 }

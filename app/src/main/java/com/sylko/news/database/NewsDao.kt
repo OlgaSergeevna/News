@@ -9,7 +9,7 @@ import com.sylko.news.pojo.News
 
 @Dao
 interface NewsDao {
-    @Query("SELECT * FROM all_articles ORDER BY publishedAt")
+    @Query("SELECT * FROM all_articles ORDER BY publishedAt DESC")
     fun getAllNews(): LiveData<List<News>>
 
     @Query("SELECT * FROM all_articles WHERE url == :url LIMIT 1")

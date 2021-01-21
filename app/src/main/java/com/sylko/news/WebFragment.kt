@@ -3,6 +3,7 @@ package com.sylko.news
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.sylko.news.databinding.WebFragmentBinding
 
@@ -16,8 +17,12 @@ class WebFragment: Fragment(R.layout.web_fragment) {
         binding = WebFragmentBinding.bind(view)
 
         val id = arguments?.get("KEY_UID") as String
+        initView(id)
+    }
 
+    private fun initView(id: String){
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.loadUrl(id)
+        binding.webView.webViewClient = WebViewClient()
     }
 }

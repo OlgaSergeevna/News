@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.squareup.picasso.Picasso
@@ -22,6 +21,17 @@ class DetailFragment : Fragment(R.layout.detail_news) {
 
         val id = arguments?.get("KEY_UID") as String
 
+        observeLiveData(id)
+
+        binding.tvMore.setOnClickListener {
+            val bundle = bundleOf(
+                Pair("KEY_UID", id),
+            )
+            NavHostFragment.findNavController(this).navigate(R.id.action_detailFragment_to_webFragment, bundle)
+        }
+    }
+
+    private fun observeLiveData(id: String){
         viewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
 
         viewModel.getDetailNews(id).observe(viewLifecycleOwner, {
@@ -30,12 +40,5 @@ class DetailFragment : Fragment(R.layout.detail_news) {
             Picasso.get().load(it.urlToImage).into(binding.ivDetail)
             binding.tvDate.text = convertPublishedAtToDate(it.publishedAt.toString())
         })
-
-        binding.tvMore.setOnClickListener {
-            val bundle = bundleOf(
-                Pair("KEY_UID", id),
-            )
-            NavHostFragment.findNavController(this).navigate(R.id.action_detailFragment_to_webFragment, bundle)
-        }
     }
 }
