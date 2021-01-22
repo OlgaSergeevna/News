@@ -1,6 +1,8 @@
 package com.sylko.news
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -31,9 +33,12 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
 
     private fun initScrollRefresh(){
         binding.srLayout.setOnRefreshListener {
-            viewModel.update()
-            adapter?.notifyDataSetChanged()
-            binding.srLayout.isRefreshing = false
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    viewModel.update()
+                    binding.srLayout.isRefreshing = false}
+                , 3000.toLong()
+            )
         }
 
         binding.srLayout.setColorSchemeResources(
